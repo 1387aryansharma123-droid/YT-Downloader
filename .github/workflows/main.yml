@@ -11,22 +11,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # This step manually accepts the licenses to prevent the error you saw
-      - name: Accept Android SDK Licenses
-        run: |
-          mkdir -p $HOME/.android
-          touch $HOME/.android/repositories.cfg
-          yes | sdkmanager --licenses || true
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
 
       - name: Build with Buildozer
         uses: digreatbrian/buildozer-action@v2
         with:
           python-version: 3.11
           work-dir: .
-          buildozer-cmd: buildozer android debug
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: MedicalApp-APK
-          path: bin/*.apk
+          # This command forces the license acceptance inside the buildozer environment
+          buildozer-cmd: yes | buildozer android debug
