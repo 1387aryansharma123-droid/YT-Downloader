@@ -6,17 +6,18 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04 # Using a specific version for better stability
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
 
       - name: Build with Buildozer
-        uses: Niklas-Scherer/buildozer-action@v1.2
+        uses: digreatbrian/buildozer-action@v2
         with:
+          python-version: 3.11
           buildozer_version: stable
-          command: buildozer android debug
-          repository_display_name: "MedicalApp"
+          command: buildozer -v android debug
+          work-dir: .
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
